@@ -1,4 +1,5 @@
 import sys
+import pickle
 def open_file(file_name, mode):
     try:
         the_file =open(file_name, mode, encoding='ISO-8859-1')
@@ -35,10 +36,11 @@ def welcome(title):
     print("\t\t", title, "\n")
 
 def main():
-    main_file = open_file("chapter7.txt", "r")
+    main_file = open_file(r"C:\python\chapter7.txt", "r")
     title = next_line(main_file)
     welcome(title)
     score = 0
+    count = 1
     category, question, answers, correct, nominal, explanation = next_block(main_file)
     while category:
         print(category)
@@ -57,6 +59,20 @@ def main():
     main_file.close()
     print("That was the last question!")
     print("You're final score is ", score)
-
+    name = input("Input your name: ")
+    record = [name,score]
+    save_record = open("records.dat", "wb")
+    pickle.dump(record, save_record)
+    save_record.close()
+    print("List of records:")
+    save_record = open("records.dat", "rb")
+    while count <= 10:
+        try:
+            record = pickle.load(save_record)
+            print(record)
+            count +=1
+        except EOFError:
+            record = ""
+        
 main()
 input("\n\nНажмите Enter, чтобы выйти.")
